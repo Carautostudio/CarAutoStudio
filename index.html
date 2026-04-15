@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Auto Studio</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0b1220;
+  margin: 0;
+}
+
+.container {
+  max-width: 520px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.business {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.phone {
+  color: #2563eb;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  text-align: right;
+  outline: none;
+  width: 65%;
+  font-size: 14px;
+}
+
+.icon {
+  margin-right: 6px;
+}
+
+.total {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: right;
+  margin-top: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.print { background: orange; color: white; }
+.whatsapp { background: #25D366; color: white; }
+.sms { background: #3b82f6; color: white; }
+
+@media print {
+  body { background: white !important; }
+  .container { padding: 0; margin: 0; }
+  .card { box-shadow: none; border-radius: 0; width: 100%; }
+  button { display: none; }
+  html, body { height: auto; }
+  @page { margin: 10mm; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div>
+        <div class="business">🚗 Car Auto Studio</div>
+        <div>20 Prescott St, Jersey City</div>
+        <div class="phone">201-658-7295</div>
+      </div>
+      <div>
+        <b>Receipt</b><br>
+        <input placeholder="REC-001">
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <span>📅 Date:</span>
+      <input id="date">
+    </div>
+
+    <div class="row">
+      <span>👤 Client:</span>
+      <input id="client" placeholder="Name">
+    </div>
+
+    <div class="row">
+      <span>📞 Phone:</span>
+      <input id="phone" placeholder="Client phone">
+    </div>
+
+    <div class="row">
+      <span>🚘 Vehicle:</span>
+      <input id="car" placeholder="Make / Model">
+    </div>
+
+    <div class="row">
+      <span>🪪 Plate:</span>
+      <input id="plate" placeholder="License plate">
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <span>Service</span>
+      <input id="service" placeholder="Service type">
+    </div>
+
+    <div class="row">
+      <span>Amount</span>
+      <input id="amount" type="number" placeholder="0">
+    </div>
+
+    <div class="total">
+      Total: $<span id="total">0</span>
+    </div>
+
+    <p style="text-align:center; margin-top:20px;">
+      Thank you for your business
+    </p>
+
+  </div>
+
+  <button class="print" onclick="window.print()">Print Receipt</button>
+  <button class="whatsapp" onclick="sendWhatsApp()">Send WhatsApp</button>
+  <button class="sms" onclick="sendSMS()">Send SMS</button>
+
+</div>
+
+<script>
+document.getElementById("date").value = new Date().toLocaleString();
+
+document.getElementById("amount").addEventListener("input", function() {
+  document.getElementById("total").innerText = this.value || 0;
+});
+
+function sendWhatsApp() {
+  let text =
+  "🚗 Car Auto Studio\n\n" +
+  "Client: " + document.getElementById("client").value + "\n" +
+  "Phone: " + document.getElementById("phone").value + "\n" +
+  "Vehicle: " + document.getElementById("car").value + "\n" +
+  "Plate: " + document.getElementById("plate").value + "\n" +
+  "Service: " + document.getElementById("service").value + "\n" +
+  "Total: $" + document.getElementById("amount").value;
+
+  window.open("https://wa.me/?text=" + encodeURIComponent(text));
+}
+
+function sendSMS() {
+  let text =
+  "Car Auto Studio\n" +
+  "Client: " + document.getElementById("client").value + "\n" +
+  "Total: $" + document.getElementById("amount").value;
+
+  window.open("sms:?&body=" + encodeURIComponent(text));
+}
+</script>
+
+</body>
+</html>
