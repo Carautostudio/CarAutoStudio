@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Auto Studio</title>
+
+<style>
+body{
+    font-family: Arial;
+    background:#0b1220;
+    margin:0;
+}
+
+/* FORM */
+.form{
+    max-width:600px;
+    margin:auto;
+    padding:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:6px;
+    border:none;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    margin-bottom:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.blue{background:#2563eb;color:white;}
+.green{background:#16a34a;color:white;}
+.orange{background:#f59e0b;color:white;}
+
+/* RECEIPT */
+.receipt{
+    background:white;
+    width:800px;
+    margin:40px auto;
+    padding:40px;
+}
+
+/* HEADER */
+.top{
+    display:flex;
+    justify-content:space-between;
+}
+
+.title{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.small{
+    color:#555;
+}
+
+/* LINE */
+.line{
+    border-top:1px solid #ddd;
+    margin:20px 0;
+}
+
+/* ROW */
+.row{
+    display:flex;
+    justify-content:space-between;
+    margin:10px 0;
+}
+
+.total{
+    text-align:right;
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* PRINT FIX */
+@media print{
+    body *{visibility:hidden;}
+
+    .receipt, .receipt *{
+        visibility:visible;
+    }
+
+    .receipt{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="form">
+    <input id="name" placeholder="Client name">
+    <input id="amount" placeholder="Amount $" type="number">
+
+    <button class="blue" onclick="generate()">Create Receipt</button>
+    <button class="orange" onclick="window.print()">Print</button>
+    <button class="green" onclick="whatsapp()">WhatsApp</button>
+</div>
+
+<div class="receipt" id="receipt">
+
+    <div class="top">
+        <div>
+            <div class="title">Car Auto Studio</div>
+            <div class="small">20 Prescott St, Jersey City</div>
+            <div class="small">201-658-7295</div>
+        </div>
+
+        <div>
+            <b>Receipt</b><br>
+            <span id="rec">REC-001</span>
+        </div>
+    </div>
+
+    <div class="line"></div>
+
+    <div class="row">
+        <div><b>Date:</b></div>
+        <div id="date"></div>
+    </div>
+
+    <div class="row">
+        <div><b>Client:</b></div>
+        <div id="client"></div>
+    </div>
+
+    <div class="line"></div>
+
+    <div class="row">
+        <div>Auto Service</div>
+        <div id="price">$0</div>
+    </div>
+
+    <div class="total" id="total">Total: $0</div>
+
+    <div style="text-align:center;margin-top:40px;">
+        Thank you for your business
+    </div>
+
+</div>
+
+<script>
+let count = 1;
+
+function generate(){
+    let name = document.getElementById("name").value;
+    let amount = document.getElementById("amount").value;
+
+    if(!name || !amount){
+        alert("Fill everything");
+        return;
+    }
+
+    document.getElementById("client").innerText = name;
+    document.getElementById("price").innerText = "$" + amount;
+    document.getElementById("total").innerText = "Total: $" + amount;
+
+    let now = new Date();
+    document.getElementById("date").innerText = now.toLocaleString();
+
+    document.getElementById("rec").innerText = "REC-" + count;
+    count++;
+}
+
+function whatsapp(){
+    let name = document.getElementById("client").innerText;
+    let total = document.getElementById("total").innerText;
+
+    let text = "Car Auto Studio Receipt\nClient: " + name + "\n" + total;
+
+    window.open("https://wa.me/?text=" + encodeURIComponent(text));
+}
+</script>
+
+</body>
+</html>
