@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Auto Studio</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#0b1220;
+}
+
+.container{
+    max-width:420px;
+    margin:auto;
+    padding:20px;
+}
+
+/* FORM */
+.form{
+    background:#111827;
+    padding:15px;
+    border-radius:10px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+    border:none;
+    font-size:14px;
+}
+
+/* RECEIPT */
+.receipt{
+    background:white;
+    color:black;
+    border-radius:12px;
+    padding:20px;
+    margin-top:15px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+}
+
+.title{
+    font-weight:bold;
+    font-size:20px;
+}
+
+.small{
+    font-size:13px;
+    color:#555;
+}
+
+.line{
+    border-bottom:1px solid #ddd;
+    margin:12px 0;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    margin:6px 0;
+}
+
+.total{
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* BUTTONS */
+button{
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.print{background:#f59e0b;color:white;}
+.whatsapp{background:#22c55e;color:white;}
+.sms{background:#3b82f6;color:white;}
+
+/* PRINT FIX */
+@media print{
+    body{
+        background:white;
+    }
+
+    body *{
+        visibility:hidden;
+    }
+
+    #printArea, #printArea *{
+        visibility:visible;
+    }
+
+    #printArea{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        padding:30px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- INPUTS -->
+<div class="form">
+<input id="clientInput" placeholder="Client name">
+<input id="carInput" placeholder="Car (Ej: Toyota 2022)">
+<input id="amountInput" placeholder="Amount ($)">
+<button onclick="generate()">Generate Receipt</button>
+</div>
+
+<!-- RECEIPT -->
+<div class="receipt" id="printArea">
+
+<div class="header">
+<div>
+<div class="title">🚗 Car Auto Studio</div>
+<div class="small">20 Prescott St, Jersey City</div>
+<div class="small">201-658-7295</div>
+</div>
+
+<div>
+<b>Receipt</b><br>
+<span id="receipt"></span>
+</div>
+</div>
+
+<div class="line"></div>
+
+<div class="row">
+<div><b>Date:</b></div>
+<div id="date"></div>
+</div>
+
+<div class="row">
+<div><b>Client:</b></div>
+<div id="client"></div>
+</div>
+
+<div class="row">
+<div><b>Car:</b></div>
+<div id="car"></div>
+</div>
+
+<div class="line"></div>
+
+<div class="row">
+<div>Auto Service</div>
+<div id="amount"></div>
+</div>
+
+<div class="line"></div>
+
+<div class="row total">
+<div>Total:</div>
+<div id="total"></div>
+</div>
+
+<p style="text-align:center;margin-top:20px;color:#555">
+Thank you for your business
+</p>
+
+</div>
+
+<button class="print" onclick="window.print()">Print Receipt</button>
+<button class="whatsapp" onclick="sendWhatsApp()">Send WhatsApp</button>
+<button class="sms" onclick="sendSMS()">Send SMS</button>
+
+</div>
+
+<script>
+
+function generate(){
+
+let client = document.getElementById("clientInput").value;
+let car = document.getElementById("carInput").value;
+let amount = document.getElementById("amountInput").value;
+
+/* SOLO llena cuando tú escribes */
+document.getElementById("client").innerText = client;
+document.getElementById("car").innerText = car;
+document.getElementById("amount").innerText = amount ? "$"+amount : "";
+document.getElementById("total").innerText = amount ? "$"+amount : "";
+
+/* AUTO DATE */
+document.getElementById("date").innerText =
+new Date().toLocaleString();
+
+/* RECEIPT RANDOM */
+document.getElementById("receipt").innerText =
+"REC-" + Math.floor(Math.random()*1000);
+}
+
+/* WHATSAPP */
+function sendWhatsApp(){
+let msg =
+`Car Auto Studio
+Client: ${document.getElementById("client").innerText}
+Car: ${document.getElementById("car").innerText}
+Total: ${document.getElementById("total").innerText}`;
+
+window.open("https://wa.me/?text="+encodeURIComponent(msg));
+}
+
+/* SMS */
+function sendSMS(){
+let msg =
+`Car Auto Studio
+Client: ${document.getElementById("client").innerText}
+Car: ${document.getElementById("car").innerText}
+Total: ${document.getElementById("total").innerText}`;
+
+window.location.href="sms:?body="+encodeURIComponent(msg);
+}
+
+</script>
+
+</body>
+</html>
