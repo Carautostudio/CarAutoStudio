@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Auto Studio</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#0f172a;
+  margin:0;
+  color:white;
+}
+
+.header{
+  text-align:center;
+  padding:20px;
+  background:#020617;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.container{
+  padding:15px;
+}
+
+.card{
+  background:#1e293b;
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:15px;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:8px;
+  border:none;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  margin-top:10px;
+  font-size:16px;
+}
+
+.save{background:#3b82f6;color:white;}
+.print{background:#f59e0b;color:black;}
+.whatsapp{background:#22c55e;color:white;}
+
+.receipt{
+  background:white;
+  color:black;
+  padding:30px;
+  border-radius:12px;
+  max-width:500px;
+  margin:20px auto;
+}
+
+.line{
+  border-top:1px solid #ccc;
+  margin:15px 0;
+}
+
+/* PRINT PRO */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #printArea, #printArea * {
+    visibility: visible;
+  }
+
+  #printArea {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    padding:60px;
+    font-size:20px;
+  }
+
+  #printArea h2{
+    font-size:34px;
+  }
+
+  #printArea p{
+    font-size:20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+🚗 Car Auto Studio<br>
+📍 20 Prescott St, Jersey City<br>
+📞 201-658-7295
+</div>
+
+<div class="container">
+
+<div class="card">
+<h3>New Receipt</h3>
+<input id="name" placeholder="Client name">
+<input id="amount" placeholder="Amount">
+<button class="save" onclick="saveReceipt()">Create Receipt</button>
+</div>
+
+<div class="card">
+<h3 id="total">Total: $0</h3>
+<button class="print" onclick="printReceipt()">Print Receipt</button>
+<button class="whatsapp" onclick="sendWhatsApp()">Send via WhatsApp</button>
+</div>
+
+<div id="receipts"></div>
+
+</div>
+
+<script>
+let total = 0;
+let receiptNumber = 1;
+let lastData = {};
+
+function saveReceipt(){
+
+  let name = document.getElementById("name").value;
+  let amount = parseFloat(document.getElementById("amount").value);
+
+  if(!name || !amount){
+    alert("Fill all fields");
+    return;
+  }
+
+  total += amount;
+  document.getElementById("total").innerText = "Total: $" + total;
+
+  let date = new Date().toLocaleString();
+  let receiptID = "REC-" + String(receiptNumber).padStart(3,"0");
+
+  lastData = {name, amount, date, receiptID};
+
+  let html = `
+  <div class="receipt" id="printArea">
+
+    <h2>Car Auto Studio</h2>
+    <p>20 Prescott St, Jersey City</p>
+    <p>Phone: 201-658-7295</p>
+
+    <div class="line"></div>
+
+    <p><strong>Receipt #:</strong> ${receiptID}</p>
+    <p><strong>Date:</strong> ${date}</p>
+
+    <div class="line"></div>
+
+    <p><strong>Client:</strong> ${name}</p>
+    <p><strong>Amount:</strong> $${amount}</p>
+
+    <div class="line"></div>
+
+    <h2>Total: $${amount}</h2>
+
+    <p style="margin-top:20px;">Thank you for your business</p>
+
+  </div>
+  `;
+
+  document.getElementById("receipts").innerHTML = html;
+
+  receiptNumber++;
+
+  document.getElementById("name").value="";
+  document.getElementById("amount").value="";
+}
+
+function printReceipt(){
+
+  if(!lastData.name){
+    alert("Create receipt first");
+    return;
+  }
+
+  let w = window.open("");
+  w.document.write(document.getElementById("printArea").outerHTML);
+  w.print();
+  w.close();
+}
+
+function sendWhatsApp(){
+
+  if(!lastData.name){
+    alert("Create receipt first");
+    return;
+  }
+
+  let text = `🧾 Car Auto Studio
+Receipt: ${lastData.receiptID}
+Client: ${lastData.name}
+Amount: $${lastData.amount}
+
+📍 20 Prescott St, Jersey City
+📞 201-658-7295`;
+
+  window.open("https://wa.me/?text=" + encodeURIComponent(text));
+}
+</script>
+
+</body>
+</html>
