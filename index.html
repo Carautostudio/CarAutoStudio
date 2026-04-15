@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Auto Studio</title>
+
+<style>
+body{
+    font-family: 'Segoe UI', Arial;
+    background:#0b1220;
+    margin:0;
+    padding:20px;
+}
+
+/* FORMULARIO */
+.container{
+    max-width:500px;
+    margin:auto;
+}
+
+.card{
+    background:#111827;
+    padding:20px;
+    border-radius:12px;
+    color:white;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:none;
+    border-radius:8px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.save{background:#2563eb;color:white;}
+.print{background:#f59e0b;color:white;}
+.whatsapp{background:#22c55e;color:white;}
+
+#receipt{
+    display:none;
+}
+
+/* RECIBO (EL QUE TE GUSTÓ PERO BIEN HECHO) */
+.receipt{
+    max-width:650px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    color:black;
+}
+
+/* HEADER */
+.top{
+    display:flex;
+    justify-content:space-between;
+}
+
+/* LINEAS */
+.line{
+    border-bottom:1px solid #ddd;
+    margin:15px 0;
+}
+
+/* TOTAL */
+.total{
+    font-size:22px;
+    font-weight:bold;
+    text-align:right;
+}
+
+/* PRINT PERFECTO */
+@media print{
+    body{
+        background:white;
+    }
+
+    body *{
+        visibility:hidden;
+    }
+
+    #receipt, #receipt *{
+        visibility:visible;
+    }
+
+    #receipt{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        padding:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+<h3>🚗 Car Auto Studio</h3>
+
+<input type="text" id="name" placeholder="Client name">
+<input type="number" id="amount" placeholder="Amount">
+
+<button class="save" onclick="create()">Create Receipt</button>
+<button class="print" onclick="printR()">Print</button>
+<button class="whatsapp" onclick="sendWA()">WhatsApp</button>
+</div>
+
+<div id="receipt"></div>
+
+</div>
+
+<script>
+
+let count = 1;
+
+function create(){
+
+let name = document.getElementById("name").value;
+let amount = document.getElementById("amount").value;
+
+if(!name || !amount){
+alert("Fill everything");
+return;
+}
+
+let date = new Date().toLocaleString();
+
+document.getElementById("receipt").style.display="block";
+
+document.getElementById("receipt").innerHTML = `
+<div class="receipt">
+
+<div class="top">
+<div>
+<h2>Car Auto Studio</h2>
+<p>20 Prescott St, Jersey City</p>
+<p>201-658-7295</p>
+</div>
+
+<div style="text-align:right;">
+<strong>Receipt</strong><br>
+REC-${count}
+</div>
+</div>
+
+<div class="line"></div>
+
+<p><strong>Date:</strong> ${date}</p>
+<p><strong>Client:</strong> ${name}</p>
+
+<div class="line"></div>
+
+<p>Auto Service <span style="float:right;">$${amount}</span></p>
+
+<div class="line"></div>
+
+<div class="total">Total: $${amount}</div>
+
+<p style="text-align:center;margin-top:20px;">
+Thank you for your business
+</p>
+
+</div>
+`;
+
+count++;
+
+}
+
+function printR(){
+window.print();
+}
+
+function sendWA(){
+let text = document.getElementById("receipt").innerText;
+window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+}
+
+</script>
+
+</body>
+</html>
