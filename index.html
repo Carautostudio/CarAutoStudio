@@ -247,3 +247,36 @@ Amount: $${last.amount}
 
 </body>
 </html>
+@media print {
+
+  body {
+    background:white;
+  }
+
+  body * {
+    visibility:hidden;
+  }
+
+  #printArea, #printArea * {
+    visibility:visible;
+  }
+
+  #printArea {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    max-width:700px;
+    margin:auto;
+    padding:40px;
+    box-shadow:none;
+    border-radius:0;
+  }
+
+  .receipt-box {
+    width:100%;
+    box-shadow:none;
+    border:none;
+  }
+
+}
