@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Auto Studio</title>
+
+<style>
+body{
+    font-family:'Segoe UI', Arial;
+    background:#0b1220;
+    margin:0;
+}
+
+/* FORM */
+.form{
+    max-width:700px;
+    margin:auto;
+    padding:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:8px;
+    border:none;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    margin-bottom:10px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.btn-blue{background:#3b82f6;color:white;}
+.btn-orange{background:#f59e0b;color:white;}
+.btn-green{background:#22c55e;color:white;}
+
+/* RECEIPT */
+.container{
+    display:flex;
+    justify-content:center;
+    padding:20px;
+}
+
+.receipt{
+    background:white;
+    width:700px;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+}
+
+.title{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.small{
+    color:#555;
+    margin-top:5px;
+}
+
+.line{
+    border-top:1px solid #ddd;
+    margin:20px 0;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    margin:8px 0;
+}
+
+.bold{font-weight:bold;}
+
+.total{
+    font-size:20px;
+    font-weight:bold;
+    text-align:right;
+    margin-top:20px;
+}
+
+.footer{
+    text-align:center;
+    margin-top:30px;
+    color:#555;
+}
+
+/* PRINT */
+@media print {
+    body *{visibility:hidden;}
+    .receipt, .receipt *{visibility:visible;}
+
+    .receipt{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        box-shadow:none;
+        border-radius:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- FORM -->
+<div class="form">
+    <input id="nameInput" placeholder="Client name">
+    <input id="amountInput" placeholder="Amount $" type="number">
+
+    <button class="btn-blue" onclick="createReceipt()">Create Receipt</button>
+    <button class="btn-orange" onclick="window.print()">Print</button>
+    <button class="btn-green" onclick="sendWhatsApp()">Send WhatsApp</button>
+</div>
+
+<!-- RECEIPT -->
+<div class="container">
+<div class="receipt" id="printArea">
+
+    <div class="header">
+        <div>
+            <div class="title">Car Auto Studio</div>
+            <div class="small">20 Prescott St, Jersey City</div>
+            <div class="small">201-658-7295</div>
+        </div>
+
+        <div>
+            <div class="bold">Receipt</div>
+            <div id="receiptNumber">REC-001</div>
+        </div>
+    </div>
+
+    <div class="line"></div>
+
+    <div class="row">
+        <div class="bold">Date:</div>
+        <div id="date"></div>
+    </div>
+
+    <div class="row">
+        <div class="bold">Client:</div>
+        <div id="client">---</div>
+    </div>
+
+    <div class="line"></div>
+
+    <div class="row">
+        <div>Auto Service</div>
+        <div id="amount">$0</div>
+    </div>
+
+    <div class="total" id="total">Total: $0</div>
+
+    <div class="footer">Thank you for your business</div>
+
+</div>
+</div>
+
+<script>
+let count = 1;
+
+function createReceipt(){
+    let name = document.getElementById("nameInput").value;
+    let amount = document.getElementById("amountInput").value;
+
+    if(!name || !amount){
+        alert("Fill all fields");
+        return;
+    }
+
+    document.getElementById("client").innerText = name;
+    document.getElementById("amount").innerText = "$" + amount;
+    document.getElementById("total").innerText = "Total: $" + amount;
+
+    let now = new Date();
+    document.getElementById("date").innerText = now.toLocaleString();
+
+    document.getElementById("receiptNumber").innerText = "REC-" + String(count).padStart(3,"0");
+    count++;
+}
+
+function sendWhatsApp(){
+    let name = document.getElementById("client").innerText;
+    let total = document.getElementById("total").innerText;
+
+    let text = `Car Auto Studio Receipt\nClient: ${name}\n${total}`;
+    let url = "https://wa.me/?text=" + encodeURIComponent(text);
+
+    window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>
